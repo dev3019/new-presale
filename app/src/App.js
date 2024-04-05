@@ -197,7 +197,11 @@ function App() {
       
       const adminAccount = Keypair.fromSecretKey(Buffer.from([148,136,143,183,68,112,180,214,200,27,96,58,214,204,216,28,91,226,247,70,196,123,102,217,229,129,111,96,239,76,25,54,127,208,185,41,168,64,97,15,29,50,207,241,25,9,95,138,187,29,207,70,232,166,108,176,251,38,141,225,115,6,110,216], 'base64'))
       const tokenMintId = new PublicKey('Wpmdtahg9TSfPRD465P4TdncXrJo53EMyKkvaBqCtRm');
-      const icoAtaForUser = await createAssociatedTokenAccount(connection, adminAccount, tokenMintId, provider.wallet.publicKey)
+      let icoAtaForUser = await getAssociatedTokenAddress(
+        tokenMintId,
+        provider.wallet.publicKey,        
+      )
+      if(!icoAtaForUser) icoAtaForUser = await createAssociatedTokenAccount(connection, adminAccount, tokenMintId, provider.wallet.publicKey)
       
       const [icoAtaForIcoProgram, bump] = PublicKey.findProgramAddressSync(
         [
